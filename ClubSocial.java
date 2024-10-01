@@ -6,43 +6,43 @@ package com.mycompany.clubsocial;
 
 import java.util.Scanner;
 
-public class ClubSocial {
+public class SocialClub {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Socio socio = new Socio();
+        Member member = new Member();
         int option;
 
         do {
             System.out.println("\n==== MENU OPTIONS ====");
             System.out.println("1. Enter Name and ID"); 
             System.out.println("2. Enter Funds");
-            System.out.println("3. Enter Names of Associates");
-            System.out.println("4. Check Pending Invoices");
+            System.out.println("3. Enter Associate Names");
+            System.out.println("4. View Pending Invoices");
             System.out.println("5. Show Member Information");
             System.out.println("6. Show Users");
             System.out.println("0. Exit");
             System.out.print("Select an option: ");
             option = sc.nextInt();
-            sc.nextLine(); 
+            sc.nextLine(); // Clear the input buffer
 
             switch (option) {
                 case 1:
-                    socio.EnterNameAndId();
+                    member.enterNameAndId(sc);
                     break;
                 case 2:
-                    socio.AvailableFunds(sc);
+                    member.availableFunds(sc);
                     break;
                 case 3:
-                    socio.ListOfPeople(sc);
+                    member.listOfPeople(sc);
                     break;
                 case 4:
-                    socio.PendingInvoices(sc);
+                    member.pendingInvoices();
                     break;
                 case 5:
-                    socio.ShowInfoPartner();
+                    member.showInfoMember();
                     break;
                 case 6:
-                    socio.showUsers(); 
+                    member.showUsers(); 
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -52,6 +52,6 @@ public class ClubSocial {
                     break;
             }
         } while (option != 0);
+        sc.close(); 
     }
 }
-
