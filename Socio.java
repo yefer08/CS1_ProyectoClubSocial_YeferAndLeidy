@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.HashSet;
 import java.util.ArrayList;
 
+
 public class Member {
     private static final int Treg = 1000000;
     private static final int Tvip = 5000000;
@@ -21,20 +22,20 @@ public class Member {
     private int availableFunds; 
     private String subscription; 
     private int pendingInvoices;
-    private HashSet<String> namesOfAssociates;
+    protected HashSet<String> namesOfAssociates;
     private ArrayList<Member> userList;
 
     public Member() {
-        this.namesOfAssociates = new HashSet<>();
         this.userList = new ArrayList<>();
+        this.namesOfAssociates = new HashSet<>();
         this.pendingInvoices = 0;
         this.availableFunds = 0;
     }
 
     public Member(String name, String id) {
+        this.namesOfAssociates = new HashSet<>();
         this.name = name;
         this.id = id;
-        this.namesOfAssociates = new HashSet<>();
         this.pendingInvoices = 0;
         this.availableFunds = 0;
     }
@@ -101,6 +102,8 @@ public class Member {
         System.out.println("List of Users:");
         for (Member member : userList) {
             System.out.println("Name: " + member.getName() + ", ID: " + member.getId());
+            System.out.println("Subscription: " + this.subscription);
+            System.out.println("Funds: " + this.availableFunds);
         }
     }
 
@@ -153,34 +156,4 @@ public class Member {
         }
     }
 
-    public void listOfPeople(Scanner sc) {
-        System.out.println("Enter the names of the associates (max. 10):");
-        while (namesOfAssociates.size() < 10) {
-            System.out.println("Enter a name (or type 'exit' to finish):");
-            String nickname = sc.nextLine();
-            if (nickname.equalsIgnoreCase("exit")) {
-                break; 
-            }
-            if (namesOfAssociates.contains(nickname)) {
-                System.out.println("The name is already registered. Please enter another.");
-            } else {
-                namesOfAssociates.add(nickname);  
-            }
-        }
-        System.out.println("Registered users: " + namesOfAssociates);
-    }
-
-    public void showInfoMember() {
-        System.out.println("===== Member Info =====");
-        if (userList.isEmpty()) {
-            System.out.println("No users registered.");
-        } else {
-            for (Member member : userList) { 
-                System.out.println("Name: " + member.getName() + ", ID: " + member.getId());
-                System.out.println("Funds: " + this.availableFunds);
-                System.out.println("Registered users: " + (namesOfAssociates.isEmpty() ? "No users registered" : namesOfAssociates));
-                System.out.println("Subscription: " + this.subscription);
-            }
-        }
-    }
 }
