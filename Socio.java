@@ -12,245 +12,175 @@ import java.util.Scanner;
 import java.util.HashSet;
 import java.util.ArrayList;
 
-public class Socio {
-    Scanner sc = new Scanner(System.in);
+public class Member {
+    private static final int Treg = 1000000;
+    private static final int Tvip = 5000000;
+
     private String name;
     private String id;
     private int availableFunds; 
     private String subscription; 
     private int pendingInvoices;
-    private int listOfPeople;
-    private HashSet<String> namesofassociates;
-    private ArrayList<Socio> userList;
-    
+    private HashSet<String> namesOfAssociates;
+    private ArrayList<Member> userList;
 
-    public Socio() {
-        this.namesofassociates = new HashSet<>();
+    public Member() {
+        this.namesOfAssociates = new HashSet<>();
         this.userList = new ArrayList<>();
         this.pendingInvoices = 0;
         this.availableFunds = 0;
     }
 
-    public Socio(String name, String id) {
+    public Member(String name, String id) {
         this.name = name;
         this.id = id;
+        this.namesOfAssociates = new HashSet<>();
+        this.pendingInvoices = 0;
+        this.availableFunds = 0;
     }
 
-    public Socio(String name, String id, int availableFunds, String subscription, int pendingInvoices) {
-        this.name = name;
-        this.id = id;
-        this.availableFunds = availableFunds;
-        this.subscription = subscription;
-        this.pendingInvoices = pendingInvoices;
-    }
-
-    
     public String getName() {
         return name;
     }
- 
+
     public void setName(String name) {
         this.name = name;
     }
- 
+
     public String getId() {
         return id;
     }
- 
+
     public void setId(String id) {
         this.id = id;
     }
- 
+
     public int getAvailableFunds() {
         return availableFunds; 
     }
- 
+
     public void setAvailableFunds(int availableFunds) {
         this.availableFunds = availableFunds; 
     }
- 
+
     public String getSubscription() {
         return subscription; 
     }
- 
+
     public void setSubscription(String subscription) { 
         this.subscription = subscription; 
     }
- 
+
     public int getPendingInvoices() {
         return pendingInvoices; 
     }
- 
+
     public void setPendingInvoices(int pendingInvoices) { 
         this.pendingInvoices = pendingInvoices; 
     }
- 
-    public int getListOfPeople() {
-        return listOfPeople; 
-    }
- 
-    public void setListOfPeople(int listOfPeople) { 
-        this.listOfPeople = listOfPeople; 
-    }
 
-    
-
-    public void EnterNameAndId() {
+    public void enterNameAndId(Scanner sc) {
         System.out.println("Enter the user's name:");
         String name = sc.nextLine();
         System.out.println("Enter the user's ID:");
         String id = sc.nextLine();
-    
-        for (Socio socio : userList) {
-            if (socio.getId().equals(id)) {
-                System.out.println("El id usuario ya existe, ingrese por favor otro.");
+
+        for (Member member : userList) {
+            if (member.getId().equals(id)) {
+                System.out.println("The ID already exists, please enter another.");
                 return;
             }
         }
-        Socio newUser = new Socio(name, id);
+
+        Member newUser = new Member(name, id);
         userList.add(newUser);
         System.out.println("User added: " + name);
     }
 
-        
-    
-
     public void showUsers() {
-        System.out.println("User List:");
-        for (Socio socio : userList) {
-            System.out.println("Name: " + socio.getName() + ", ID: " + socio.getId());
+        System.out.println("List of Users:");
+        for (Member member : userList) {
+            System.out.println("Name: " + member.getName() + ", ID: " + member.getId());
         }
     }
-    
-    
-    int Tpregu = 1000000;
-    int Tpvip = 5000000;   
-    public void AvailableFunds(Scanner sc) {
-        System.out.println("ENTER SUBSCRIPTION VALUE: ");
+
+    public void availableFunds(Scanner sc) {
+        System.out.println("ENTER SUBSCRIPTION AMOUNT: ");
         this.availableFunds = sc.nextInt();
-    
+
         if (this.availableFunds < 50000) {
             System.out.println("--NO FUNDS--");
-        } else if (this.availableFunds >= 50000 && this.availableFunds < 100000) {
+            return;
+        }
+
+        if (this.availableFunds < 100000) {
+            this.subscription = "REGULAR";
             System.out.println("--REGULAR--");
-    
-            
-            System.out.println("Do you want to add new funds? (yes/no)");
-            String respuesta = sc.next(); 
-    
-            if (respuesta.equalsIgnoreCase("yes")) {
-                System.out.println("Enter your new funds (up to 1,000,000):");
-                int newFunds = sc.nextInt();
-                if (newFunds > Tpregu ) {
-                    System.out.println("Your funds exceed the allowed limit.");
-                    }else if(newFunds<Tpregu){
-                        if(this.availableFunds < Tpregu){
-                            this.availableFunds += newFunds;
-                             System.out.println("Funds added successfully. Total funds: " + this.availableFunds);
-                    }else{
-                        System.out.println("You cannot add funds because the available funds already exceed the limit.");
-                    }
-                } else {
-                    System.out.println("Your funds exceed the allowed limit.");
-                }
-            } else {
-                System.out.println("OK, thanks....");
-            }
-        } else if (this.availableFunds >= 100000 && this.availableFunds <5000000) {
+            handleFunds(sc, Treg);
+        } else if (this.availableFunds < Tvip) {
+            this.subscription = "VIP";
             System.out.println("--VIP--");
-    
-            
-            System.out.println("Do you want to add new funds? (yes/no)");
-            String respuesta = sc.next(); 
-    
-            if (respuesta.equalsIgnoreCase("yes")) {
-                System.out.println("Enter your new funds (up to 5,000,000):");
-                int newFunds = sc.nextInt();
-                if (newFunds > Tpvip) {
-                    System.out.println("Your funds exceed the allowed limit.");
-                }else if (newFunds < Tpvip){
-                    if(this.availableFunds < Tpvip){
-                        this.availableFunds += newFunds; 
-                        System.out.println("Funds added successfully. Total funds: " + this.availableFunds);
-                    }else{
-                    System.out.println("You cannot add funds because the available funds already exceed the limit.");
-                    }
-                }else {
-                    System.out.println("Your funds exceed the allowed limit.");
-                }
-                }else {
-                System.out.println("OK, thanks....");
-            }
-            }else {
+            handleFunds(sc, Tvip);
+        } else {
             System.out.println("--UNRECOGNIZED AMOUNT--");
         }
     }
-    public void PendingInvoices(Scanner sc){
-        int acom= 0;
-        if (pendingInvoices == acom){
-            System.out.println("--YOUR ACCOUNT IS-- "+ acom);
+
+    private void handleFunds(Scanner sc, int limit) {
+        System.out.println("Would you like to add new funds? (yes/no)");
+        String response = sc.next();
+
+        if (response.equalsIgnoreCase("yes")) {
+            System.out.println("Enter your new funds (up to " + limit + "):");
+            int newFunds = sc.nextInt();
+
+            if (this.availableFunds + newFunds > limit) {
+                System.out.println("Your funds exceed the allowed limit.");
+            } else {
+                this.availableFunds += newFunds;
+                System.out.println("Funds added successfully. Total funds: " + this.availableFunds);
+            }
+        } else {
+            System.out.println("OK, thank you....");
         }
     }
-    public void ListOfPeople(Scanner sc){
-        System.out.println("Enter the names of associates (max 10):");
-        while (namesofassociates.size() < 10) {
+
+    public void pendingInvoices() {
+        if (pendingInvoices == 0) {
+            System.out.println("--YOUR ACCOUNT HAS NO PENDING INVOICES--");
+        } else {
+            System.out.println("Pending invoices: " + pendingInvoices);
+        }
+    }
+
+    public void listOfPeople(Scanner sc) {
+        System.out.println("Enter the names of the associates (max. 10):");
+        while (namesOfAssociates.size() < 10) {
             System.out.println("Enter a name (or type 'exit' to finish):");
             String nickname = sc.nextLine();
             if (nickname.equalsIgnoreCase("exit")) {
                 break; 
             }
-            if (namesofassociates.contains(nickname)) {
+            if (namesOfAssociates.contains(nickname)) {
                 System.out.println("The name is already registered. Please enter another.");
             } else {
-                namesofassociates.add(nickname);  
+                namesOfAssociates.add(nickname);  
             }
         }
- 
-        System.out.println("registered users: ");
-        System.out.println(namesofassociates);
+        System.out.println("Registered users: " + namesOfAssociates);
     }
- 
-    
 
- 
-    
-    public void ShowInfoPartner() {
-        System.out.println("===== Info Socio =====");
+    public void showInfoMember() {
+        System.out.println("===== Member Info =====");
         if (userList.isEmpty()) {
             System.out.println("No users registered.");
         } else {
-            System.out.println("User List:");
-            for (Socio socio : userList) { 
-                System.out.println("Name: " + socio.getName() + ", ID: " + socio.getId());
+            for (Member member : userList) { 
+                System.out.println("Name: " + member.getName() + ", ID: " + member.getId());
                 System.out.println("Funds: " + this.availableFunds);
-                System.out.println("Registered Users: " + (namesofassociates.isEmpty() ? "No users registered" : namesofassociates));
+                System.out.println("Registered users: " + (namesOfAssociates.isEmpty() ? "No users registered" : namesOfAssociates));
                 System.out.println("Subscription: " + this.subscription);
             }
         }
     }
 }
-      // Method to display the list of users
-      
-
-    /*public void Ingresodeusuario(){
-        System.out.println("ENTER YOUR NAME AND LAST NAME: ");
-        String name1 = sc.nextLine();
-        if (nombres.contains(name1)) {
-            System.out.println("El usuario ya está registrado.");
-            return;
-            System.out.println("Ingresa los nombres de asociados (máximo 10):");
-            while (nombres.size() < 10) {
-                System.out.println("Ingresa un nombre (o escribe 'salir' para terminar):");
-                String nombre = sc.nextLine();
-                if (nombre.equalsIgnoreCase("salir")) {
-                    break; 
-                }
-                if (nombres.contains(nombre)) {
-                    System.out.println("El nombre ya está registrado. Por favor, ingresa otro.");
-                } else {
-                    nombres.add(nombre); 
-                }
-        } 
-    }
-}*/
-
