@@ -17,7 +17,7 @@ public class Affiliates extends Member {
     public Affiliates(String lastName, String name, String id, int availableFunds, String subscription, int pendingInvoices) {
         super(name, id, availableFunds, subscription, pendingInvoices);
         this.lastName = lastName;
-        this.namesOfAssociates = new HashSet<>(); // Inicializa aquí
+        this.namesOfAssociates = new HashSet<>();
     }
     
     public Affiliates() {
