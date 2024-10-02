@@ -24,7 +24,7 @@ public class SocialClub {
             System.out.println("0. Exit");
             System.out.print("Select an option: ");
             option = sc.nextInt();
-            sc.nextLine(); // Clear the input buffer
+            sc.nextLine(); 
 
             switch (option) {
                 case 1:
