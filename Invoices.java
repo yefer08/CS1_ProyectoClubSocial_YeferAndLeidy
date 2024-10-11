@@ -4,6 +4,8 @@ public class Invoices {
     private int invoiceAmount;
     private boolean isPaid;
     private int pendingInvoices;
+    private static int[] costsArray = new int[20];
+    private int iterate = 0;
 
     public Invoices(int invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
@@ -35,26 +37,36 @@ public class Invoices {
         this.pendingInvoices = pendingInvoices;
     }
 
+    // Registro de costos
     public void fullcosts(Scanner sc) {
+        if (iterate >= costsArray.length) {
+            System.out.println("You have reached the limit of 20 expenses. No more expenses can be added.");
+            return;
+        }
+
         System.out.println("Enter the cost of incurred expenses: ");
         int costs = sc.nextInt();
-        sc.nextLine(); 
+        sc.nextLine();
+
+        costsArray[iterate] = costs;
         pendingInvoices += costs;
+        iterate++;
+
+        System.out.println("Expense added. Current pending invoices: " + pendingInvoices);
     }
 
-    public void displayInvoiceStatus() {
-        if (isPaid) {
-            System.out.println("Invoice of " + invoiceAmount + " is PAID.");
+    // Mostrar gastos
+    public void displayExpenses() {
+        if (iterate == 0) {
+            System.out.println("No expenses registered.");
         } else {
-            System.out.println("Invoice of " + invoiceAmount + " is PENDING.");
+            System.out.println("===== List of Incurred Expenses =====");
+            for (int i = 0; i < iterate; i++) {
+                System.out.println("Expense " + (i + 1) + ": " + costsArray[i]);
+            }
+            System.out.println("Total pending invoices: " + pendingInvoices);
         }
     }
 
-    public void pendingInvoices() {
-        if (pendingInvoices == 0) {
-            System.out.println("--YOUR ACCOUNT HAS NO PENDING INVOICES--");
-        } else {
-            System.out.println("Pending invoices: " + pendingInvoices);
-        }
-    }
+    // Verificar facturas pendientes
 }

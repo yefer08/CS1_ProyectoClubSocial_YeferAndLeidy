@@ -13,20 +13,18 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 public class Member extends SocialClub {
-    private static final int Treg = 1000000; // Límite de fondos para REGULAR
+    private static final int MAX_USERS = 35; // Límite de usuarios totales
+    private static final int MAX_VIP = 3; // Límite de usuarios VIP
     private static final int Tvip = 5000000; // Límite de fondos para VIP
-
+    private static int vipCount = 0; // Contador de usuarios VIP
+    
     private String name;
     private String id;
     private int availableFunds;
     private String subscription;
     private Invoices invoices; // Instancia de la clase Invoices para manejar facturas
-
     protected HashSet<String> namesOfAssociates;
     private static ArrayList<Member> userList = new ArrayList<>(); // Lista de usuarios estática
-    private static int vipCount = 0; // Contador de usuarios VIP
-    private static final int MAX_USERS = 35; // Límite de usuarios totales
-    private static final int MAX_VIP = 3; // Límite de usuarios VIP
 
     public Member() {
         this.namesOfAssociates = new HashSet<>();
@@ -84,7 +82,6 @@ public class Member extends SocialClub {
     }
 
     // Método para ingresar nombre e ID
-    @Override
     public void enterNameAndId(Scanner sc) {
         if (userList.size() >= MAX_USERS) {
             System.out.println("The maximum number of users (35) has been reached. Cannot add more users.");
@@ -96,6 +93,7 @@ public class Member extends SocialClub {
         System.out.println("Enter the user's ID:");
         String id = sc.nextLine();
 
+        // Validar ID único
         for (Member member : userList) {
             if (member.getId().equals(id)) {
                 System.out.println("The ID already exists, please enter another.");
@@ -108,12 +106,12 @@ public class Member extends SocialClub {
         System.out.println("User added: " + name);
     }
 
-    // Mostrar los usuarios
+    // Mostrar los usuarios junto con sus facturas pendientes
     @Override
     public void showUsers() {
         System.out.println("List of Users:");
         for (Member member : userList) {
-            System.out.println("Name: " + member.getName() + ", ID: " + member.getId() + ", Subscription: " + this.subscription + 
+            System.out.println("Name: " + member.getName() + ", ID: " + member.getId() + ", Subscription: " + member.getSubscription() +
             ", Pending Invoices: " + member.getInvoices().getPendingInvoices());
         }
     }
@@ -121,11 +119,6 @@ public class Member extends SocialClub {
     // Gestión de fondos y suscripción
     @Override
     public void availableFunds(Scanner sc) {
-        if (userList.size() >= MAX_USERS) {
-            System.out.println("Cannot add more users, the limit has been reached.");
-            return;
-        }
-
         System.out.println("ENTER SUBSCRIPTION AMOUNT: ");
         this.availableFunds = sc.nextInt();
         sc.nextLine(); // Limpiar el buffer
@@ -135,16 +128,10 @@ public class Member extends SocialClub {
             return;
         }
 
-        if (this.availableFunds < 100000) {
-            this.subscription = "REGULAR";
-            System.out.println("--REGULAR SUBSCRIPTION--");
-        } else if (this.availableFunds < Tvip && vipCount < MAX_VIP) {
+        if (this.availableFunds < Tvip && vipCount < MAX_VIP) {
             this.subscription = "VIP";
             vipCount++; // Aumenta el contador de VIP
             System.out.println("--VIP SUBSCRIPTION--");
-        } else if (this.availableFunds >= Tvip) {
-            System.out.println("--UNRECOGNIZED AMOUNT--");
-            return;
         } else if (vipCount >= MAX_VIP) {
             System.out.println("Cannot add more VIP members. The limit of 3 VIP members has been reached.");
             return;
@@ -153,7 +140,6 @@ public class Member extends SocialClub {
         handleFunds(sc);
     }
 
-    // Manejo de fondos adicionales
     private void handleFunds(Scanner sc) {
         System.out.println("Would you like to add new funds? (yes/no)");
         String response = sc.next();
@@ -170,12 +156,4 @@ public class Member extends SocialClub {
         }
     }
 
-    // Método para mostrar y gestionar facturas
-    public void displayPendingInvoices() {
-        this.invoices.pendingInvoices();
-    }
-
-    public void addInvoiceCost(Scanner sc) {
-        this.invoices.fullcosts(sc);
-    }
 }
