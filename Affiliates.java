@@ -42,11 +42,23 @@ public class Affiliates extends Member {
         System.out.println("Registered users: " + namesOfAssociates);
     }
 
+    public void removeAuthorizedPersons(Scanner sc) {
+        System.out.println("Enter the name of the associate to remove:");
+        String nameToRemove = sc.nextLine(); 
+        if (namesOfAssociates.contains(nameToRemove)) {
+            namesOfAssociates.remove(nameToRemove);
+            System.out.println("The person " + nameToRemove + " was successfully removed.");
+        } else {
+            System.out.println("The person to be deleted was not found.");
+        }
+    }
+
     public void showInfoAffiliates() {
         System.out.println("===== Affiliates Info =====");
         System.out.println("Registered Associates: " + (namesOfAssociates.isEmpty() ? "No associates registered" : namesOfAssociates));
     }
 }
+
 
          
          

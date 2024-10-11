@@ -22,6 +22,7 @@
              System.out.println("6. Show Users");
              System.out.println("7. Display Invoice Status");
              System.out.println("8. Register costs");
+             System.out.println("9. remove partners");
              System.out.println("0. Exit");
              System.out.print("Select an option: ");
              option = sc.nextInt();
@@ -51,6 +52,8 @@
                      break;
                  case 8:
                      invoice.fullcosts(sc);
+                 case 9:
+                     affiliates.removeAuthorizedPersons(sc);
                  case 0:
                      System.out.println("Exiting...");
                      break;
