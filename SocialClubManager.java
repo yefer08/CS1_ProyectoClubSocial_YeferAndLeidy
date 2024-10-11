@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
-public class SocialClubManager { // El nombre de la clase coincide con el nombre del archivo
+public class SocialClubManager { 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Member member = new Member();
         Affiliates affiliates = new Affiliates();
-        Invoices invoice = new Invoices(1000); // Ejemplo de factura
+        Invoices invoice = new Invoices(1000); 
         int option;
 
         do {
@@ -43,7 +43,7 @@ public class SocialClubManager { // El nombre de la clase coincide con el nombre
                     member.showUsers(); 
                     break;
                 case 7:
-                    invoice.displayInvoiceStatus(); // Muestra el estado de la factura
+                    invoice.displayInvoiceStatus(); 
                     break;
                 case 8:
                     invoice.fullcosts(sc);
@@ -58,7 +58,5 @@ public class SocialClubManager { // El nombre de la clase coincide con el nombre
         sc.close(); 
     }
 }
-
-//pendejo
 
 
