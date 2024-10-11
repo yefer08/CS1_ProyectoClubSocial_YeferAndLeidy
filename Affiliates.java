@@ -1,21 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.clubsocial;
-
-import java.util.HashSet;
 import java.util.Scanner;
-/**
- *
- * @author yanca
- */
+import java.util.HashSet;
+
 public class Affiliates extends Member {
     private String lastName;
     private HashSet<String> namesOfAssociates;
 
     public Affiliates(String lastName, String name, String id, int availableFunds, String subscription, int pendingInvoices) {
-        super(name, id, availableFunds, subscription, pendingInvoices);
+        super(name, id);
         this.lastName = lastName;
         this.namesOfAssociates = new HashSet<>();
     }
@@ -25,15 +16,14 @@ public class Affiliates extends Member {
         this.lastName = "";
         this.namesOfAssociates = new HashSet<>(); 
     }
+
     public String getLastName() {
         return lastName;
     }
 
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
 
     public void listOfPeople(Scanner sc) {
         System.out.println("Enter the names of the associates (max. 10):");
@@ -51,15 +41,10 @@ public class Affiliates extends Member {
         }
         System.out.println("Registered users: " + namesOfAssociates);
     }
+
     public void showInfoAffiliates() {
         System.out.println("===== Affiliates Info =====");
         System.out.println("Registered Associates: " + (namesOfAssociates.isEmpty() ? "No associates registered" : namesOfAssociates));
     }
 }
-   
 
-         
-         
-    
-        
-    
