@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+
 public class ErrorHandler {
 
     // Excepción personalizada para manejo de ID duplicado
@@ -14,27 +15,27 @@ public class ErrorHandler {
             super(message);
         }
     }
+
     // Excepción para manejo de límites de usuarios
     public static class MaxUsersException extends Exception {
         public MaxUsersException(String message) {
             super(message);
         }
     }
+
     // Excepción para manejo de fondos insuficientes
     public static class InsufficientFundsException extends Exception {
         public InsufficientFundsException(String message) {
             super(message);
         }
     }
+
     // Excepción para manejo de límites de VIP
     public static class MaxVIPMembersException extends Exception {
         public MaxVIPMembersException(String message) {
             super(message);
         }
     }
-
-
-
 
     // Método para manejar errores de ID duplicado
     public static void checkDuplicateID(String id, ArrayList<Member> userList) throws DuplicateIDException {
@@ -45,8 +46,8 @@ public class ErrorHandler {
         }
     }
 
-     // Método para validar si se ha alcanzado el número máximo de usuarios
-     public static void checkMaxUsers(int currentUsers, int maxUsers) throws MaxUsersException {
+    // Método para validar si se ha alcanzado el número máximo de usuarios
+    public static void checkMaxUsers(int currentUsers, int maxUsers) throws MaxUsersException {
         if (currentUsers >= maxUsers) {
             throw new MaxUsersException("The maximum number of users (" + maxUsers + ") has been reached. Cannot add more users.");
         }
@@ -58,14 +59,13 @@ public class ErrorHandler {
             throw new InsufficientFundsException("--NO FUNDS--");
         }
     }
-    public static void checkVIPLimit(int currentVIPCount, int maxVIPCount) throws Exception {
+
+    // Método para validar si se ha alcanzado el límite de VIPs
+    public static void checkVIPLimit(int currentVIPCount, int maxVIPCount) throws MaxVIPMembersException {
         if (currentVIPCount >= maxVIPCount) {
-            throw new Exception("Cannot add more VIP members. The limit of " + maxVIPCount + " VIP members has been reached.");
+            throw new MaxVIPMembersException("Cannot add more VIP members. The limit of " + maxVIPCount + " VIP members has been reached.");
         }
     }
-
-    // Método para manejar el límite de usuarios VIP
-    
 
     // Método para manejar el límite de fondos de una suscripción
     public static void checkFundsLimit(int availableFunds, int maxLimit, String subscriptionType) throws LimitExceededException {
@@ -79,6 +79,7 @@ public class ErrorHandler {
         System.out.println("Entrada inválida. Por favor, ingresa un valor numérico.");
     }
 
+    // Método para verificar si hay facturas pendientes de un miembro
     public static void checkPendingInvoices(Member member) throws Exception {
         if (member.getInvoices().getPendingInvoices() > 0) {
             throw new Exception("Error: Cannot remove members with pending invoices.");
@@ -98,5 +99,4 @@ public class ErrorHandler {
             throw new Exception("Error: Cannot remove members with more than one authorized associate.");
         }
     }
-    
 }

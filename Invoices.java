@@ -6,11 +6,10 @@ public class Invoices {
     private int pendingInvoices; // Facturas pendientes
     private static int[] costsArray = new int[20]; // Arreglo para almacenar costos
     private int iterate = 0; // Contador para el número de gastos registrados
-    private int availableFunds;
-
+    
+    
     public Invoices(int invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
-        this.isPaid = false;
         this.pendingInvoices = 0;
     }
 
@@ -43,17 +42,20 @@ public class Invoices {
     public void fullCosts(Scanner sc) {
         while (true) { // Bucle para ingresar múltiples costos
             if (iterate >= costsArray.length) {
-                System.out.println("You have reached the limit of 20 expenses. No more expenses can be added.");
-                return;
+                try {
+                    throw new ErrorHandler.LimitExceededException("Se alcanzó el límite de 20 gastos.");
+                } catch (ErrorHandler.LimitExceededException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                }
             }
     
-            System.out.println("Enter the cost of incurred expenses (or type 'stop' to finish): ");
-            
+            System.out.println("Ingrese el costo de los gastos incurridos (o escriba 'stop' para finalizar): ");
             String input = sc.nextLine(); // Leer entrada como texto
     
             // Verificar si el usuario desea detenerse
             if (input.equalsIgnoreCase("stop")) {
-                System.out.println("Expense entry finished.");
+                System.out.println("Registro de gastos finalizado.");
                 break;
             }
     
@@ -62,13 +64,13 @@ public class Invoices {
             try {
                 costs = Integer.parseInt(input); // Convertir la entrada a número
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number or 'stop' to finish.");
+                ErrorHandler.handleInputMismatchException(); // Llama a la función para manejar el error de entrada
                 continue; // Pedir un nuevo valor
             }
     
             // Validar que el costo sea positivo
             if (costs <= 0) {
-                System.out.println("The cost must be a positive value.");
+                System.out.println("El costo debe ser un valor positivo.");
                 continue; // Pedir un nuevo valor
             }
     
@@ -76,51 +78,62 @@ public class Invoices {
             pendingInvoices += costs; // Actualizar facturas pendientes
             iterate++; // Incrementar contador
     
-            System.out.println("Expense added. Current pending invoices: " + pendingInvoices);
+            System.out.println("Gasto añadido. Facturas pendientes actuales: " + pendingInvoices);
         }
     }
     
-
     // Mostrar gastos
     public void displayExpenses() {
         if (iterate == 0) {
-            System.out.println("No expenses registered.");
+            System.out.println("No hay gastos registrados.");
         } else {
-            System.out.println("===== List of Incurred Expenses =====");
+            System.out.println("===== Lista de gastos incurridos =====");
             for (int i = 0; i < iterate; i++) {
-                System.out.println("Expense " + (i + 1) + ": " + costsArray[i]);
+                System.out.println("Gasto " + (i + 1) + ": " + costsArray[i]);
             }
-            System.out.println("Total pending invoices: " + pendingInvoices);
+            System.out.println("Total de facturas pendientes: " + pendingInvoices);
         }
     }
 
     // Pagar facturas
     public void payInvoices(Scanner sc) {
         System.out.println("Ingrese el valor a pagar: ");
-        int pay = sc.nextInt();
+        
+        int pay;
+        try {
+            pay = sc.nextInt();
+        } catch (Exception e) {
+            ErrorHandler.handleInputMismatchException(); // Llama a la función para manejar el error de tipo de entrada
+            sc.next(); // Limpiar el buffer
+            return;
+        }
 
         // Verifica si el monto ingresado es válido
         if (pay <= 0) {
-            System.out.println("El monto a pagar debe ser un valor positivo.");
-            return;
-            //aplicar manejo de erroes
+            try {
+                throw new ErrorHandler.InsufficientFundsException("El monto a pagar debe ser un valor positivo.");
+            } catch (ErrorHandler.InsufficientFundsException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
         }
+
         // Verifica si el pago es mayor que las facturas pendientes
-        if (pay >= pendingInvoices) {
-            this.pendingInvoices-=pay;
-            // Paga todas las facturas pendientes
-            this.availableFunds -= pay; // Deduct payment from available funds
+        if (pay > pendingInvoices) {
+            try {
+                throw new ErrorHandler.LimitExceededException("El monto ingresado excede las facturas pendientes.");
+            } catch (ErrorHandler.LimitExceededException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+        } else if (pay == pendingInvoices) {
             pendingInvoices = 0; // Establecer facturas pendientes a cero
             isPaid = true; // Establecer estado de pago
             System.out.println("Todas las facturas han sido pagadas.");
         } else {
-            // Realiza un pago parcial
-            this.availableFunds -= pay; // Deduct payment from available funds
-            pendingInvoices -= pay; // Reduce the pending invoices by the payment amount
+            pendingInvoices -= pay; // Reducir las facturas pendientes por el monto del pago
             System.out.println("Pago parcial realizado. Facturas restantes: " + pendingInvoices);
         }
     }
-
-    
 }
 
