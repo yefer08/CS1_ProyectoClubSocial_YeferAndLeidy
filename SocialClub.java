@@ -17,6 +17,8 @@ public abstract class SocialClub {
 
     public abstract void availableFunds(Scanner sc); // Manejar los fondos disponibles
 
+    public abstract boolean removeMember(Scanner sc,String id);
+
     // Método para establecer fondos disponibles (se puede usar en subclases)
     public void setAvailableFunds(int amount) {
         if (amount < 0) {
@@ -38,5 +40,7 @@ public abstract class SocialClub {
     public void setSubscription(String subscription) {
         this.subscription = subscription;
     }
+
+
 }
 

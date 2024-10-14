@@ -1,11 +1,12 @@
 import java.util.Scanner;
 
-public class Invoices extends SocialClub {
+public class Invoices {
     private int invoiceAmount; // Monto de la factura
     private boolean isPaid; // Estado de pago
     private int pendingInvoices; // Facturas pendientes
     private static int[] costsArray = new int[20]; // Arreglo para almacenar costos
     private int iterate = 0; // Contador para el número de gastos registrados
+    private int availableFunds;
 
     public Invoices(int invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
@@ -120,16 +121,6 @@ public class Invoices extends SocialClub {
         }
     }
 
-    @Override
-    public void showUsers() {
-        // Implementación del método para mostrar usuarios (debe ser completada)
-        throw new UnsupportedOperationException("Unimplemented method 'showUsers'");
-    }
-
-    @Override
-    public void availableFunds(Scanner sc) {
-        // Implementación del método para manejar fondos disponibles (debe ser completada)
-        throw new UnsupportedOperationException("Unimplemented method 'availableFunds'");
-    }
+    
 }
 

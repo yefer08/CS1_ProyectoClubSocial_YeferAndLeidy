@@ -23,6 +23,7 @@ public class SocialClubManager {
             System.out.println("7. pays");
             System.out.println("8. Register Costs");
             System.out.println("9. Remove Partners");
+            System.out.println("10.remove Member");
             System.out.println("0. Exit");
             System.out.print("Select an option: ");
             option = sc.nextInt();
@@ -56,6 +57,8 @@ public class SocialClubManager {
                 case 9:
                     affiliates.removeAuthorizedPersons(sc, invoice.getPendingInvoices()); 
                     break;
+                case 10:
+                    member.removeMember(sc, null);
                 case 0:
                     System.out.println("Exiting...");
                     break;
