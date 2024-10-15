@@ -37,6 +37,20 @@ public class ErrorHandler {
         }
     }
 
+    // Excepción para manejo de miembros VIP
+    public static class VIPMemberException extends Exception {
+        public VIPMemberException(String message) {
+            super(message);
+        }
+    }
+
+    // Excepción para manejar facturas pendientes
+    public static class PendingInvoicesException extends Exception {
+        public PendingInvoicesException(String message) {
+            super(message);
+        }
+    }
+
     // Método para manejar errores de ID duplicado
     public static void checkDuplicateID(String id, ArrayList<Member> userList) throws DuplicateIDException {
         for (Member member : userList) {
@@ -49,21 +63,21 @@ public class ErrorHandler {
     // Método para validar si se ha alcanzado el número máximo de usuarios
     public static void checkMaxUsers(int currentUsers, int maxUsers) throws MaxUsersException {
         if (currentUsers >= maxUsers) {
-            throw new MaxUsersException("The maximum number of users (" + maxUsers + ") has been reached. Cannot add more users.");
+            throw new MaxUsersException("El número máximo de usuarios (" + maxUsers + ") ha sido alcanzado. No se pueden agregar más usuarios.");
         }
     }
 
     // Método para validar si los fondos son suficientes para cualquier suscripción
     public static void checkAvailableFunds(int funds) throws InsufficientFundsException {
         if (funds < 50000) {
-            throw new InsufficientFundsException("--NO FUNDS--");
+            throw new InsufficientFundsException("Los fondos son insuficientes. Debes ingresar al menos $50,000.");
         }
     }
 
     // Método para validar si se ha alcanzado el límite de VIPs
     public static void checkVIPLimit(int currentVIPCount, int maxVIPCount) throws MaxVIPMembersException {
         if (currentVIPCount >= maxVIPCount) {
-            throw new MaxVIPMembersException("Cannot add more VIP members. The limit of " + maxVIPCount + " VIP members has been reached.");
+            throw new MaxVIPMembersException("No se pueden agregar más miembros VIP. Se ha alcanzado el límite de " + maxVIPCount + " miembros VIP.");
         }
     }
 
@@ -80,23 +94,24 @@ public class ErrorHandler {
     }
 
     // Método para verificar si hay facturas pendientes de un miembro
-    public static void checkPendingInvoices(Member member) throws Exception {
+    public static void checkPendingInvoices(Member member) throws PendingInvoicesException {
         if (member.getInvoices().getPendingInvoices() > 0) {
-            throw new Exception("Error: Cannot remove members with pending invoices.");
+            throw new PendingInvoicesException("Error: No se pueden eliminar miembros con facturas pendientes.");
         }
     }
 
     // Método para validar si un miembro es VIP
-    public static void checkVIPStatus(Member member) throws Exception {
+    public static void checkVIPStatus(Member member) throws VIPMemberException {
         if (member.getSubscription().equalsIgnoreCase("VIP")) {
-            throw new Exception("Error: Cannot remove VIP members.");
+            throw new VIPMemberException("Error: No se pueden eliminar miembros VIP.");
         }
     }
 
     // Método para validar si un miembro tiene más de un autorizado
-    public static void checkMultipleAssociates(Member member) throws Exception {
+    public static void checkMultipleAssociates(Member member) throws PendingInvoicesException {
         if (member.namesOfAssociates.size() > 1) {
-            throw new Exception("Error: Cannot remove members with more than one authorized associate.");
+            throw new PendingInvoicesException("Error: No se pueden eliminar miembros con más de un autorizado.");
         }
     }
 }
+

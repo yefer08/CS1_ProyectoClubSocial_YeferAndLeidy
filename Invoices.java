@@ -12,6 +12,10 @@ public class Invoices {
         this.invoiceAmount = invoiceAmount;
         this.pendingInvoices = 0;
     }
+    public Invoices() {
+        this.invoiceAmount = invoiceAmount;
+        this.pendingInvoices = 0;
+    }
 
     // Getters y Setters
     public int getInvoiceAmount() {
@@ -96,37 +100,38 @@ public class Invoices {
     }
 
     // Pagar facturas
-    public void payInvoices(Scanner sc) {
+    public void payInvoices(Scanner sc, Member member) {
         System.out.println("Ingrese el valor a pagar: ");
         
         int pay;
         try {
             pay = sc.nextInt();
         } catch (Exception e) {
-            ErrorHandler.handleInputMismatchException(); // Llama a la función para manejar el error de tipo de entrada
+            ErrorHandler.handleInputMismatchException(); // Manejo de error de tipo de entrada
             sc.next(); // Limpiar el buffer
             return;
         }
-
+    
         // Verifica si el monto ingresado es válido
         if (pay <= 0) {
-            try {
-                throw new ErrorHandler.InsufficientFundsException("El monto a pagar debe ser un valor positivo.");
-            } catch (ErrorHandler.InsufficientFundsException e) {
-                System.out.println(e.getMessage());
-                return;
-            }
+            System.out.println("El monto a pagar debe ser un valor positivo.");
+            return;
         }
-
+    
         // Verifica si el pago es mayor que las facturas pendientes
         if (pay > pendingInvoices) {
-            try {
-                throw new ErrorHandler.LimitExceededException("El monto ingresado excede las facturas pendientes.");
-            } catch (ErrorHandler.LimitExceededException e) {
-                System.out.println(e.getMessage());
-                return;
-            }
-        } else if (pay == pendingInvoices) {
+            System.out.println("El monto ingresado excede las facturas pendientes.");
+            return;
+        }
+    
+        // Verifica si el miembro tiene suficientes fondos
+        if (pay > member.getAvailableFunds()) {
+            System.out.println("Error: Fondos insuficientes para realizar el pago.");
+            return;
+        }
+    
+        // Realiza el pago
+        if (pay == pendingInvoices) {
             pendingInvoices = 0; // Establecer facturas pendientes a cero
             isPaid = true; // Establecer estado de pago
             System.out.println("Todas las facturas han sido pagadas.");
@@ -134,6 +139,10 @@ public class Invoices {
             pendingInvoices -= pay; // Reducir las facturas pendientes por el monto del pago
             System.out.println("Pago parcial realizado. Facturas restantes: " + pendingInvoices);
         }
+    
+        // Actualiza los fondos disponibles del miembro
+        member.setAvailableFunds(member.getAvailableFunds() - pay); // Restar el monto pagado
+        System.out.println("Fondos restantes después del pago: $" + member.getAvailableFunds());
     }
 }
 

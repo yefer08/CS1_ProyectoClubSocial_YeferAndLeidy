@@ -9,7 +9,7 @@ public class SocialClubManager {
         Scanner sc = new Scanner(System.in);
         Member member = new Member();
         Affiliates affiliates = new Affiliates();
-        Invoices invoice = new Invoices(1000); 
+        Invoices invoice = new Invoices(); 
         int option;
 
         do {
@@ -24,6 +24,7 @@ public class SocialClubManager {
             System.out.println("8. Register Costs");
             System.out.println("9. Remove Partners");
             System.out.println("10.remove Member");
+            System.out.println("11.addExpense");
             System.out.println("0. Exit");
             System.out.print("Select an option: ");
             option = sc.nextInt();
@@ -49,7 +50,7 @@ public class SocialClubManager {
                     member.showUsers(); 
                     break;
                 case 7:
-                    invoice.payInvoices(sc); 
+                    invoice.payInvoices(sc, member); 
                     break;
                 case 8:
                     invoice.fullCosts(sc); 
@@ -59,6 +60,8 @@ public class SocialClubManager {
                     break;
                 case 10:
                     member.removeMember(sc, null);
+                case 11:
+                affiliates.addExpense(sc, member);
                 case 0:
                     System.out.println("Exiting...");
                     break;

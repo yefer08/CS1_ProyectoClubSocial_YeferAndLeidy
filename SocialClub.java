@@ -8,7 +8,7 @@ public abstract class SocialClub {
 
     // Constructor
     public SocialClub() {
-        this.availableFunds = 0;
+        this.availableFunds = 30000;
         this.subscription = "";
     }
 

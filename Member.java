@@ -25,19 +25,22 @@ public class Member extends SocialClub {
 
     // Constructor por defecto
     public Member() {
+        super();
         this.namesOfAssociates = new HashSet<>();
         this.availableFunds = 0;
         this.invoices = new Invoices(0); // Inicializar facturas
+        this.subscription = "";
     }
 
     // Constructor que recibe nombre y ID
     public Member(String name, String id) {
+        super();
         this.namesOfAssociates = new HashSet<>();
         this.name = name;
         this.id = id;
         this.availableFunds = 0;
-        this.subscription = "";
         this.invoices = new Invoices(0); // Inicializar las facturas
+        this.subscription = "";
     }
 
     // Métodos de acceso (getters y setters)
@@ -122,42 +125,38 @@ public class Member extends SocialClub {
     @Override
     public void availableFunds(Scanner sc) {
         System.out.println("ENTER SUBSCRIPTION AMOUNT: ");
-        this.availableFunds = sc.nextInt();
+        int funds = sc.nextInt();
         sc.nextLine(); // Limpiar el buffer
 
-        // Verificar si el monto es menor que el mínimo requerido para cualquier suscripción
-        if (this.availableFunds < 50000) {
-            System.out.println("--NO FUNDS--");
-            return;
-        }
+        try {
+            // Verificar fondos disponibles
+            ErrorHandler.checkAvailableFunds(funds);
 
-        // Validar suscripción Regular
-        if (this.availableFunds < 100000 && this.availableFunds <= REGULAR_LIMIT) {
-            this.subscription = "REGULAR";
-            System.out.println("--REGULAR SUBSCRIPTION--");
-        }
-        // Validar suscripción VIP
-        else if (this.availableFunds >= 100000 && this.availableFunds <= VIP_LIMIT) {
-            try {
-                // Validar si se puede añadir más miembros VIP
+            // Validar suscripción Regular
+            System.out.println("Funds entered: " + funds);
+            if (funds < 100000 && funds <= REGULAR_LIMIT) {
+                this.subscription = "REGULAR";
+                System.out.println("Subscription set to: " + this.subscription);
+                System.out.println("--REGULAR SUBSCRIPTION--");
+            }
+            // Validar suscripción VIP
+            else if (funds >= 100000 && funds <= VIP_LIMIT) {
                 ErrorHandler.checkVIPLimit(vipCount, MAX_VIP);
                 this.subscription = "VIP";
                 vipCount++; // Incrementar el contador de VIP
                 System.out.println("--VIP SUBSCRIPTION--");
-            } catch (Exception e) {
-                // Manejo del error si el límite de VIPs es alcanzado
-                System.out.println(e.getMessage());
-                return;  // Salir del método si ocurre un error
             }
-        }
-        // Excede el límite para cualquier suscripción
-        else if (this.availableFunds > VIP_LIMIT) {
-            System.out.println("Amount exceeds the maximum limit for VIP subscription (5,000,000). Please enter a valid amount.");
-            return;
-        }
+            // Excede el límite para cualquier suscripción
+            else if (funds > VIP_LIMIT) {
+                System.out.println("Amount exceeds the maximum limit for VIP subscription (5,000,000). Please enter a valid amount.");
+                return;
+            }
 
-        // Manejo de fondos adicionales dentro de los límites
-        handleFunds(sc);
+            // Manejo de fondos adicionales dentro de los límites
+            handleFunds(sc);
+        } catch (ErrorHandler.MaxVIPMembersException | ErrorHandler.InsufficientFundsException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // Manejar adición de más fondos
@@ -170,24 +169,35 @@ public class Member extends SocialClub {
             int newFunds = sc.nextInt();
             sc.nextLine(); // Limpiar el buffer
 
-            // Validar límites según la suscripción
-            if (this.subscription.equals("REGULAR") && this.availableFunds + newFunds > REGULAR_LIMIT) {
-                System.out.println("Cannot exceed $1,000,000 for REGULAR members.");
-                return;
-            }
+            try {
+                // Validar límites según la suscripción
+                if (this.subscription.equals("REGULAR")) {
+                    ErrorHandler.checkFundsLimit(this.availableFunds + newFunds, REGULAR_LIMIT, "REGULAR");
+                }
 
-            if (this.subscription.equals("VIP") && this.availableFunds + newFunds > VIP_LIMIT) {
-                System.out.println("Cannot exceed $5,000,000 for VIP members.");
-                return;
-            }
+                if (this.subscription.equals("VIP")) {
+                    ErrorHandler.checkFundsLimit(this.availableFunds + newFunds, VIP_LIMIT, "VIP");
+                }
 
-            // Si todo es válido, agregar los nuevos fondos
-            this.availableFunds += newFunds;
-            System.out.println("Funds added. Total funds: " + this.availableFunds);
+                // Si todo es válido, agregar los nuevos fondos
+                this.availableFunds += newFunds;
+                System.out.println("Funds added. Total funds: " + this.availableFunds);
+
+            } catch (ErrorHandler.LimitExceededException e) {
+                System.out.println(e.getMessage());
+            }
 
         } else {
             System.out.println("No additional funds added.");
         }
+    }
+    public void subtractFunds(int amount) {
+        if (amount > availableFunds) {
+            System.out.println("Error: No se pueden restar más fondos de los disponibles.");
+            return;
+        }
+        this.availableFunds -= amount;
+        System.out.println("Fondos restantes: $" + this.availableFunds);
     }
 
     @Override
@@ -221,7 +231,7 @@ public class Member extends SocialClub {
             System.out.println("Member with ID " + remove + " has been successfully removed.");
             return true;
 
-        } catch (Exception e) {
+        } catch (ErrorHandler.VIPMemberException | ErrorHandler.PendingInvoicesException e) {
             // Capturar cualquier error y mostrar el mensaje de error
             System.out.println(e.getMessage());
             return false;
