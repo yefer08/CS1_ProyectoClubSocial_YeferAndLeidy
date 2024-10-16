@@ -9,22 +9,21 @@ public class SocialClubManager {
         Scanner sc = new Scanner(System.in);
         Member member = new Member();
         Affiliates affiliates = new Affiliates();
-        Invoices invoice = new Invoices(); 
+        Invoices invoices = new Invoices(); 
         int option;
 
         do {
             System.out.println("\n==== MENU OPTIONS ====");
-            System.out.println("1. Enter Name and ID");
-            System.out.println("2. Enter Funds");
-            System.out.println("3. Enter Associate Names");
-            System.out.println("4. View Pending Invoices");
-            System.out.println("5. Show Affiliates Information");
-            System.out.println("6. Show Users");
-            System.out.println("7. pays");
-            System.out.println("8. Register Costs");
-            System.out.println("9. Remove Partners");
-            System.out.println("10.remove Member");
-            System.out.println("11.addExpense");
+            System.out.println("1. Register Member Info (Name and Funds)");
+            System.out.println("2. Enter Associate Names");
+            System.out.println("3. View Pending Invoices");
+            System.out.println("4. Show Affiliates Information");
+            System.out.println("5. Show Users");
+            System.out.println("6. Pay Invoices");
+            System.out.println("7. Register Costs");
+            System.out.println("8. Remove Associate");
+            System.out.println("9. Remove Member");
+            System.out.println("10. Add Expense");
             System.out.println("0. Exit");
             System.out.print("Select an option: ");
             option = sc.nextInt();
@@ -32,36 +31,35 @@ public class SocialClubManager {
 
             switch (option) {
                 case 1:
-                    member.enterNameAndId(sc); 
+                    member.registerMember(sc); // Método combinado
                     break;
                 case 2:
-                    member.availableFunds(sc); 
-                    break;
-                case 3:
                     affiliates.listOfPeople(sc); 
                     break;
-                case 4:
-                    invoice.displayExpenses(); 
+                case 3:
+                    invoices.displayExpenses();  // Cambiado a displayExpenses
                     break;
-                case 5:
+                case 4:
                     affiliates.showInfoAffiliates(); 
                     break;
-                case 6:
+                case 5:
                     member.showUsers(); 
                     break;
+                case 6:
+                    invoices.payInvoices(sc, member); 
+                    break;
                 case 7:
-                    invoice.payInvoices(sc, member); 
+                    invoices.fullCosts(sc); 
                     break;
                 case 8:
-                    invoice.fullCosts(sc); 
+                    affiliates.removeAuthorizedPersons(sc, invoices.getPendingInvoices()); 
                     break;
                 case 9:
-                    affiliates.removeAuthorizedPersons(sc, invoice.getPendingInvoices()); 
+                    member.removeMember(sc, null); // Asegúrate de que 'null' sea adecuado aquí
                     break;
                 case 10:
-                    member.removeMember(sc, null);
-                case 11:
-                affiliates.addExpense(sc, member);
+                    affiliates.addExpense(sc, member);
+                    break;
                 case 0:
                     System.out.println("Exiting...");
                     break;
@@ -73,4 +71,6 @@ public class SocialClubManager {
         sc.close();
     }
 }
+
+ 
  

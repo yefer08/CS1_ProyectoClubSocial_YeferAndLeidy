@@ -8,16 +8,17 @@ public abstract class SocialClub {
 
     // Constructor
     public SocialClub() {
-        this.availableFunds = 30000;
+        this.availableFunds = 0;  // Sin fondos iniciales hasta que el usuario los ingrese
         this.subscription = "";
     }
 
+    // Método abstracto para registrar miembros (nuevo método unificado)
+    public abstract void registerMember(Scanner sc); // Manejar el registro de nuevos miembros
+
     // Métodos abstractos que deben ser implementados por las subclases
-    public abstract void showUsers(); // Mostrar los usuarios registrados
+    public abstract void showUsers();  // Mostrar los usuarios registrados
 
-    public abstract void availableFunds(Scanner sc); // Manejar los fondos disponibles
-
-    public abstract boolean removeMember(Scanner sc,String id);
+    public abstract boolean removeMember(Scanner sc, String id);  // Eliminar un miembro por su ID
 
     // Método para establecer fondos disponibles (se puede usar en subclases)
     public void setAvailableFunds(int amount) {
@@ -40,7 +41,7 @@ public abstract class SocialClub {
     public void setSubscription(String subscription) {
         this.subscription = subscription;
     }
-
-
 }
+
+
 
