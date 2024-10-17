@@ -1,59 +1,65 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
- 
+
 public class Invoices {
     private int invoiceAmount; // Monto de la factura
     private boolean isPaid; // Estado de pago
     private int pendingInvoices; // Facturas pendientes
     private static int[] costsArray = new int[20]; // Arreglo para almacenar costos
     private int iterate = 0; // Contador para el número de gastos registrados
-   
+    private static ArrayList<Member> userList = new ArrayList<>(); // Lista de usuarios
+    private List<Invoice> invoiceList; // Lista para almacenar facturas
+
+    Affiliates affiliates = new Affiliates();
+
     public Invoices(int invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
         this.pendingInvoices = 0;
+        this.invoiceList = new ArrayList<>();
     }
- 
+
     public Invoices() {
         this.pendingInvoices = 0;
+        this.invoiceList = new ArrayList<>(); // Asegúrate de inicializar la lista
     }
- 
-    public int getInvoiceAmount() {
-        return invoiceAmount;
-    }
- 
-    public void setInvoiceAmount(int invoiceAmount) {
-        this.invoiceAmount = invoiceAmount;
-    }
- 
-    public boolean isPaid() {
-        return isPaid;
-    }
- 
-    public void setPaid(boolean isPaid) {
-        this.isPaid = isPaid;
-    }
- 
+
     public int getPendingInvoices() {
-        return pendingInvoices;
+        return this.pendingInvoices;
     }
- 
-    public void setPendingInvoices(int pendingInvoices) {
-        this.pendingInvoices = pendingInvoices;
-    }
- 
-    public void registerCosts(Scanner sc, Affiliates affiliates, Member member) {
-        System.out.println("¿Eres el titular (t) o un afiliado (a)?");
-        String tipo = sc.nextLine().toLowerCase();
-       
-        if (tipo.equals("t")) {
-            fullCosts(sc);
-        } else if (tipo.equals("a")) {
-            affiliates.addExpense(sc, member);
-        } else {
-            System.out.println("Opción no válida, por favor elige 't' o 'a'.");
-        }
-    }
- 
+
+
+
+    // Método para registrar costos y crear facturas
     public void fullCosts(Scanner sc) {
+        System.out.println("Ingrese el ID de usuario:");
+        String userId = sc.nextLine(); // Leer el ID de usuario
+
+        // Validar que el ID ingresado no esté vacío
+        if (userId == null || userId.trim().isEmpty()) {
+            System.out.println("El ID ingresado no puede estar vacío.");
+            return;
+        }
+
+        // Verificar si el ID de usuario existe en la lista 
+        Member foundMember = null;
+        for (Member member : userList) {
+            if (member.getId() != null && member.getId().equals(userId)) {
+                foundMember = member;
+                break; // Salir del bucle si se encuentra el miembro
+            }
+        }
+
+        if (foundMember == null) {
+            System.out.println("ID ingresado: " + userId);
+            System.out.println("El ID de usuario no es válido.");
+            return;
+        }
+
+        // Asumimos que ya tienes el `Member` encontrado, puedes trabajar con él.
+        System.out.println("Registro de gastos para el usuario: " + foundMember.getName() + " (ID: " + foundMember.getId() + ")");
+
+        // Continuar con la lógica de registro de gastos
         while (true) {
             if (iterate >= costsArray.length) {
                 try {
@@ -63,97 +69,92 @@ public class Invoices {
                     return;
                 }
             }
-   
+
             System.out.println("Ingrese el costo de los gastos incurridos (o escriba 'stop' para finalizar): ");
             String input = sc.nextLine();
-   
-            // Verificar si el usuario desea detenerse
+
             if (input.equalsIgnoreCase("stop")) {
                 System.out.println("Registro de gastos finalizado.");
                 break;
             }
-   
-            // Intentar convertir la entrada en un número
+
             int costs;
             try {
                 costs = Integer.parseInt(input); // Convertir la entrada a número
             } catch (NumberFormatException e) {
                 ErrorHandler.handleInputMismatchException(); // Llama a la función para manejar el error de entrada
+                System.out.println("Error: El valor ingresado no es un número válido.");
                 continue; // Pedir un nuevo valor
             }
-   
-            // Validar que el costo sea positivo
+
             if (costs <= 0) {
                 System.out.println("El costo debe ser un valor positivo.");
                 continue; // Pedir un nuevo valor
             }
-   
+
+            // Crear una nueva factura
+            Invoice newInvoice = new Invoice(foundMember.getId(), costs, input, costs); // Asegúrate de que el constructor de Invoice acepte ID y monto
+            invoiceList.add(newInvoice); // Añadir la factura a la lista de facturas
+
+            // Registrar el costo en el arreglo
             costsArray[iterate] = costs;
             pendingInvoices += costs; // Actualizar facturas pendientes
             iterate++; // Incrementar contador
-   
-            System.out.println("Gasto añadido. Facturas pendientes actuales: " + pendingInvoices);
+
+            System.out.println("Gasto añadido. Factura registrada con ID: " + newInvoice.getId() + 
+                               " por valor: " + costs + ". Total de facturas pendientes: " + pendingInvoices);
         }
     }
-   
-    // Mostrar gastos
-    public void displayExpenses() {
-        if (iterate == 0) {
-            System.out.println("No hay gastos registrados.");
-        } else {
-            System.out.println("===== Lista de gastos incurridos =====");
-            for (int i = 0; i < iterate; i++) {
-                System.out.println("Gasto " + (i + 1) + ": " + costsArray[i]);
+
+    // Método para mostrar las facturas
+    public void showInvoices(Scanner sc) {
+        System.out.println("Ingrese el ID de usuario:");
+        String userId = sc.nextLine(); // Leer el ID de usuario
+
+        // Validar que el ID ingresado no esté vacío
+        if (userId == null || userId.trim().isEmpty()) {
+            System.out.println("El ID ingresado no puede estar vacío.");
+            return;
+        }
+
+        // Verificar si el ID de usuario existe en la lista 
+        Member foundMember = null;
+        for (Member member : userList) {
+            if (member.getId() != null && member.getId().equals(userId)) {
+                foundMember = member;
+                break; // Salir del bucle si se encuentra el miembro
             }
-            System.out.println("Total de facturas pendientes: " + pendingInvoices);
         }
-    }
- 
-    // Pagar facturas
-    public void payInvoices(Scanner sc, Member member) {
-        System.out.println("Ingrese el valor a pagar: ");
-       
-        int pay;
-        try {
-            pay = sc.nextInt();
-        } catch (Exception e) {
-            ErrorHandler.handleInputMismatchException(); // Manejo de error de tipo de entrada
-            sc.next(); // Limpiar el buffer
+
+        if (foundMember == null) {
+            System.out.println("ID ingresado: " + userId);
+            System.out.println("El ID de usuario no es válido.");
             return;
         }
-   
-        // Verifica si el monto ingresado es válido
-        if (pay <= 0) {
-            System.out.println("El monto a pagar debe ser un valor positivo.");
-            return;
-        }
-   
-        // Verifica si el pago es mayor que las facturas pendientes
-        if (pay > pendingInvoices) {
-            System.out.println("El monto ingresado excede las facturas pendientes.");
-            return;
-        }
-   
-        // Verifica si el miembro tiene suficientes fondos
-        if (pay > member.getAvailableFunds()) {
-            System.out.println("Fondos disponibles: $" + member.getAvailableFunds());
-            System.out.println("Error: Fondos insuficientes para realizar el pago.");
-            return;
-        }
-   
-        // Realiza el pago
-        if (pay == pendingInvoices) {
-            pendingInvoices = 0; // Establecer facturas pendientes a cero
-            isPaid = true; // Establecer estado de pago
-            System.out.println("Todas las facturas han sido pagadas.");
+
+        // Mostrar las facturas del miembro encontrado
+        System.out.println("Facturas para el usuario: " + foundMember.getName() + " (ID: " + foundMember.getId() + ")");
+
+        // Comprobar si hay facturas pendientes
+        if (invoiceList.isEmpty()) {
+            System.out.println("No hay facturas pendientes para este usuario.");
         } else {
-            pendingInvoices -= pay; // Reducir las facturas pendientes por el monto del pago
-            System.out.println("Pago parcial realizado. Facturas restantes: " + pendingInvoices);
+            // Obtener la lista de facturas desde la instancia de Invoices
+            for (Invoice invoice : invoiceList) {
+                System.out.println("Factura ID: " + invoice.getId() + 
+                                   ", Monto: " + invoice.getAmount() + 
+                                   ", Fecha: " + invoice.getDate());
+            }
         }
-   
-        // Actualiza los fondos disponibles del miembro
-        member.setAvailableFunds(member.getAvailableFunds() - pay); // Restar el monto pagado
-        System.out.println("Fondos restantes después del pago: $" + member.getAvailableFunds());
     }
+
+   
+
+    public void payInvoices(Scanner sc, Member member) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'payInvoices'");
+    }
+
+    
 }
 
