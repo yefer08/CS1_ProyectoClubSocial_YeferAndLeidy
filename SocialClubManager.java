@@ -32,10 +32,10 @@ public class SocialClubManager {
 
             switch (option) {
                 case 1:
-                    member.enterNameAndId(sc); 
+                    member.registerMember(sc); 
                     break;
                 case 2:
-                    member.availableFunds(sc); 
+                    member.addFunds(sc); 
                     break;
                 case 3:
                     affiliates.listOfPeople(sc); 
