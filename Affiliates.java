@@ -45,31 +45,45 @@ public class Affiliates extends SocialClub {
 
     // Método para agregar gastos a nombre del socio principal
     public void addExpense(Scanner sc, Member member) {
-        System.out.print("Ingresa el nombre del asociado: ");
+        System.out.print("Enter the name of the associate: ");
         String affiliateName = sc.nextLine().trim(); // Lee el nombre del asociado y elimina espacios
-    
+
         if (!namesOfAssociates.contains(affiliateName)) {
-            System.out.println("Error: El afiliado '" + affiliateName + "' no está registrado.");
+            System.out.println("Error: The affiliate '" + affiliateName + "' is not registered.");
             return;
         }
-    
-        System.out.print("Ingresa el monto del gasto a generar por parte del afiliado " + affiliateName + ": ");
-        int amount = sc.nextInt();
-        sc.nextLine(); // Limpiar el buffer
-    
-        // Validar que el miembro tenga suficientes fondos antes de registrar el gasto
-        if (amount > member.getAvailableFunds()) {
-            System.out.println("Error: Fondos insuficientes para cubrir el gasto de $" + amount);
-            return;
+
+        System.out.print("Enter the expense amount for affiliate " + affiliateName + ": ");
+        int amount;
+
+        try {
+            amount = sc.nextInt();
+            sc.nextLine(); // Limpiar el buffer
+
+            // Validar que el monto sea positivo
+            if (amount <= 0) {
+                System.out.println("Error: The expense amount must be positive.");
+                return;
+            }
+
+            // Validar que el miembro tenga suficientes fondos antes de registrar el gasto
+            if (amount > member.getAvailableFunds()) {
+                System.out.println("Error: Insufficient funds to cover the expense of $" + amount);
+                return;
+            }
+
+            // Registrar el gasto
+            expenses.put(affiliateName, expenses.getOrDefault(affiliateName, 0) + amount);
+            System.out.println("Expense of $" + amount + " recorded for the associate: " + affiliateName);
+            
+            // Actualizar los fondos del miembro
+            member.setAvailableFunds(member.getAvailableFunds() - amount); // Restar el gasto
+            System.out.println("Expense of $" + amount + " deducted from member " + member.getName() + "'s account.");
+
+        } catch (Exception e) {
+            System.out.println("Error: Please enter a valid amount.");
+            sc.nextLine(); // Limpiar el buffer en caso de error
         }
-    
-        // Registrar el gasto
-        expenses.put(affiliateName, expenses.getOrDefault(affiliateName, 0) + amount);
-        System.out.println("Gasto de $" + amount + " registrado para el asociado: " + affiliateName);
-        
-        // Actualizar los fondos del miembro
-        member.setAvailableFunds(member.getAvailableFunds() - amount); // Restar el gasto
-        System.out.println("Gasto de $" + amount + " restado de la cuenta del miembro " + member.getName());
     }
 
     // Mostrar gastos registrados
@@ -92,8 +106,7 @@ public class Affiliates extends SocialClub {
         // Verificar si hay facturas pendientes
         if (pendingInvoices != 0) {
             System.out.println("Cannot remove " + nameToRemove + ", there are pending invoices.");
-        } else if (namesOfAssociates.contains(nameToRemove)) {
-            namesOfAssociates.remove(nameToRemove);
+        } else if (namesOfAssociates.remove(nameToRemove)) {
             System.out.println("The person '" + nameToRemove + "' was successfully removed.");
         } else {
             System.out.println("The person '" + nameToRemove + "' was not found in the associates list.");
@@ -119,13 +132,14 @@ public class Affiliates extends SocialClub {
     }
 
     @Override
-    public void availableFunds(Scanner sc) {
-        System.out.println("This method is currently not implemented for affiliates.");
+    public boolean removeMember(Scanner sc, String id) {
+        throw new UnsupportedOperationException("Unimplemented method 'removeMember'");
     }
 
     @Override
-    public boolean removeMember(Scanner sc, String id) {
-        throw new UnsupportedOperationException("Unimplemented method 'removeMember'");
+    public void registerMember(Scanner sc) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'registerMember'");
     }
 }
 

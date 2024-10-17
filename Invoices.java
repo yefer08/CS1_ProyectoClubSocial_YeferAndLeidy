@@ -13,7 +13,6 @@ public class Invoices {
         this.pendingInvoices = 0;
     }
     public Invoices() {
-        this.invoiceAmount = invoiceAmount;
         this.pendingInvoices = 0;
     }
 
