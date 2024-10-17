@@ -33,7 +33,11 @@ public class SocialClubManager {
                     member.registerMember(sc); 
                     break;
                 case 2:
+<<<<<<< HEAD
                     member.checkInformation(sc); 
+=======
+                    member.addFunds(sc); 
+>>>>>>> origin/code-update
                     break;
                 case 3:
                     affiliates.registerMember(sc); 
