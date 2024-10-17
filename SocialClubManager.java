@@ -15,36 +15,34 @@ public class SocialClubManager {
         do {
             System.out.println("\n==== MENU OPTIONS ====");
             System.out.println("1. Enter Name and ID");
-            System.out.println("2. Enter Funds");
+            System.out.println("2. check information");
             System.out.println("3. Enter Associate Names");
             System.out.println("4. View Pending Invoices");
             System.out.println("5. Show Affiliates Information");
             System.out.println("6. Show Users");
-            System.out.println("7. pays");
+            System.out.println("7. Pay Invoices");
             System.out.println("8. Register Costs");
-            System.out.println("9. Remove Partners");
-            System.out.println("10.remove Member");
-            System.out.println("11.addExpense");
+            System.out.println("9. Remove Member or Affiliate");
             System.out.println("0. Exit");
             System.out.print("Select an option: ");
             option = sc.nextInt();
-            sc.nextLine(); 
+            sc.nextLine(); // Consumir el salto de línea
 
             switch (option) {
                 case 1:
                     member.registerMember(sc); 
                     break;
                 case 2:
-                    member.addFunds(sc); 
+                    member.checkInformation(sc); 
                     break;
                 case 3:
-                    affiliates.listOfPeople(sc); 
+                    affiliates.registerMember(sc); 
                     break;
                 case 4:
                     invoice.displayExpenses(); 
                     break;
                 case 5:
-                    affiliates.showInfoAffiliates(); 
+                    affiliates.showUsers(); 
                     break;
                 case 6:
                     member.showUsers(); 
@@ -53,15 +51,12 @@ public class SocialClubManager {
                     invoice.payInvoices(sc, member); 
                     break;
                 case 8:
-                    invoice.fullCosts(sc); 
+                    invoice.registerCosts(sc, affiliates, member);
                     break;
                 case 9:
-                    affiliates.removeAuthorizedPersons(sc, invoice.getPendingInvoices()); 
+                    member.removeMemberOrAffiliate(sc, invoice); 
                     break;
-                case 10:
-                    member.removeMember(sc, null);
-                case 11:
-                affiliates.addExpense(sc, member);
+
                 case 0:
                     System.out.println("Exiting...");
                     break;
@@ -73,4 +68,5 @@ public class SocialClubManager {
         sc.close();
     }
 }
+
  

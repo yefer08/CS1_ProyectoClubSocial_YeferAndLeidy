@@ -21,6 +21,7 @@ public class Member extends SocialClub {
 
     protected HashSet<String> namesOfAssociates; // Nombres de los asociados
     private Invoices invoices; // Facturas del usuario
+    private Affiliates affiliates;
     private static ArrayList<Member> userList = new ArrayList<>(); // Lista estática de usuarios
 
     // Constructor por defecto
@@ -30,6 +31,7 @@ public class Member extends SocialClub {
         this.availableFunds = 0;
         this.invoices = new Invoices(0); // Inicializar facturas
         this.subscription = "";
+        this.affiliates = new Affiliates();
     }
 
     // Constructor que recibe nombre y ID
@@ -41,6 +43,7 @@ public class Member extends SocialClub {
         this.availableFunds = 0;
         this.invoices = new Invoices(0); // Inicializar las facturas
         this.subscription = "";
+        this.affiliates = new Affiliates();
     }
 
     // Métodos de acceso (getters y setters)
@@ -126,10 +129,47 @@ public class Member extends SocialClub {
             // Agregar el usuario a la lista
             userList.add(newUser);
             System.out.println("User added: " + name);
+            newUser.addFunds(sc);
 
         } catch (ErrorHandler.MaxUsersException | ErrorHandler.DuplicateIDException | ErrorHandler.MaxVIPMembersException | ErrorHandler.InsufficientFundsException e) {
             // Capturar y mostrar cualquier error
             System.out.println(e.getMessage());
+        }
+    }
+    public void checkInformation(Scanner sc) {
+        boolean continueEditing = true;
+        Affiliates affiliates = new Affiliates();
+
+        while (continueEditing) {
+            System.out.println("\n=== Edit Member Information ===");
+            System.out.println("1. Change Name");
+            System.out.println("2. Add Affiliates");
+            System.out.println("3. Add Funds");
+            System.out.println("0. Exit");
+            System.out.print("Select an option: ");
+            int option = sc.nextInt();
+            sc.nextLine(); // Limpiar el buffer
+
+            switch (option) {
+                case 1:
+                    System.out.println("Enter new name:");
+                    String newName = sc.nextLine();
+                    this.name = newName; // Cambiar el nombre
+                    System.out.println("Name updated to: " + this.name);
+                    break;
+                case 2:
+                    affiliates.listOfPeople(sc); // Agregar más afiliados
+                    break;
+                case 3:
+                    addFunds(sc); // Agregar más fondos
+                    break;
+                case 0:
+                    continueEditing = false; // Salir del bucle
+                    break;
+                default:
+                    System.out.println("INVALID OPTION, PLEASE TRY AGAIN.");
+                    break;
+            }
         }
     }
 
@@ -145,36 +185,7 @@ public class Member extends SocialClub {
         }
     }
 
-    // Método para manejar adición de más fondos
-    public void addFunds(Scanner sc) {
-        System.out.println("Would you like to add new funds? (yes/no)");
-        String response = sc.next();
-
-        if (response.equalsIgnoreCase("yes")) {
-            System.out.println("Enter the new amount to add: ");
-            int newFunds = sc.nextInt();
-            sc.nextLine(); // Limpiar el buffer
-
-            try {
-                // Validar límites según la suscripción
-                if (this.subscription.equals("REGULAR")) {
-                    ErrorHandler.checkFundsLimit(this.availableFunds + newFunds, REGULAR_LIMIT, "REGULAR");
-                } else if (this.subscription.equals("VIP")) {
-                    ErrorHandler.checkFundsLimit(this.availableFunds + newFunds, VIP_LIMIT, "VIP");
-                }
-
-                // Si todo es válido, agregar los nuevos fondos
-                this.availableFunds += newFunds;
-                System.out.println("Funds added. Total funds: $" + this.availableFunds);
-
-            } catch (ErrorHandler.LimitExceededException e) {
-                System.out.println(e.getMessage());
-            }
-
-        } else {
-            System.out.println("No additional funds added.");
-        }
-    }
+    
     @Override
     public boolean removeMember(Scanner sc, String id) {
         // Imprimir mensaje para pedir el ID del socio
@@ -212,5 +223,41 @@ public class Member extends SocialClub {
             return false;
         }
     }
+    public boolean removeAffiliate(Scanner sc, int pendingInvoices, HashSet<String> affiliatedNames) {
+        System.out.print("Enter the name of the affiliate to remove: ");
+        String nameToRemove = sc.nextLine().trim();
+
+        // Verificar si hay facturas pendientes
+        if (pendingInvoices != 0) {
+            System.out.println("Cannot remove " + nameToRemove + ", there are pending invoices.");
+            return false;
+        }
+
+        // Verificar si el afiliado existe
+        if (affiliatedNames.contains(nameToRemove)) {
+            affiliatedNames.remove(nameToRemove);
+            System.out.println("The affiliate '" + nameToRemove + "' was successfully removed.");
+            return true;
+        } else {
+            System.out.println("The affiliate '" + nameToRemove + "' was not found in the list.");
+            return false;
+        }
+    }
+
+    // Método que combina la eliminación de miembros y afiliados
+    public void removeMemberOrAffiliate(Scanner sc, Invoices invoice) {
+        System.out.print("Do you want to remove a Member or an Affiliate? (M/A): ");
+        String choice = sc.nextLine().trim().toUpperCase();
+
+        if (choice.equals("M")) {
+            this.removeMember(sc, null); // Llama al método de eliminación de miembro
+        } else if (choice.equals("A")) {
+            // Llama al método de eliminación de afiliado
+            removeAffiliate(sc, invoice.getPendingInvoices(), namesOfAssociates);
+        } else {
+            System.out.println("Invalid choice. Please enter 'M' for Member or 'A' for Affiliate.");
+        }
+    }
 }
+
 
