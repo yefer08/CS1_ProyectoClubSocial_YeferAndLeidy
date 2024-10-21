@@ -219,9 +219,46 @@ public class Member extends SocialClub {
         // Busca el miembro correspondiente en userList
         Member foundMember = null;
         for (Member member : userList) {
+<<<<<<< HEAD
             if (member.getId().equals(inputId)) {
                 foundMember = member;
                 break; // Salimos del bucle si encontramos al miembro
+=======
+            System.out.println("Name: " + member.getName() + ", ID: " + member.getId() +
+                    ", Subscription: " + member.getSubscription() +
+                    ", Pending Invoices: " + member.getInvoices().getPendingInvoices() +
+                    ", Available Funds: " + member.getAvailableFunds());
+        }
+    }
+
+<<<<<<< HEAD
+    
+=======
+    // Método para manejar adición de más fondos
+    public void addFunds(Scanner sc) {
+        System.out.println("Would you like to add new funds? (yes/no)");
+        String response = sc.next();
+
+        if (response.equalsIgnoreCase("yes")) {
+            System.out.println("Enter the new amount to add: ");
+            int newFunds = sc.nextInt();
+            sc.nextLine(); // Limpiar el buffer
+
+            try {
+                // Validar límites según la suscripción
+                if (this.subscription.equals("REGULAR")) {
+                    ErrorHandler.checkFundsLimit(this.availableFunds + newFunds, REGULAR_LIMIT, "REGULAR");
+                } else if (this.subscription.equals("VIP")) {
+                    ErrorHandler.checkFundsLimit(this.availableFunds + newFunds, VIP_LIMIT, "VIP");
+                }
+
+                // Si todo es válido, agregar los nuevos fondos
+                this.availableFunds += newFunds;
+                System.out.println("Funds added. Total funds: $" + this.availableFunds);
+
+            } catch (ErrorHandler.LimitExceededException e) {
+                System.out.println(e.getMessage());
+>>>>>>> origin/code-update
             }
         }
 
@@ -236,7 +273,11 @@ public class Member extends SocialClub {
             System.out.println("ID de miembro no válido. No se encontró ningún miembro con ese ID.");
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/code-update
+>>>>>>> origin/code-update
     @Override
     public boolean removeMember(Scanner sc, String id) {
         // Imprimir mensaje para pedir el ID del socio

@@ -47,6 +47,68 @@ public class Affiliates extends SocialClub {
         // Mostrar la lista de asociados registrados para ese miembro
         System.out.println("Registered associates: " + (namesOfAssociates.isEmpty() ? "No associates registered." : namesOfAssociates));
     }
+<<<<<<< HEAD
+=======
+
+<<<<<<< HEAD
+=======
+    // Método para agregar gastos a nombre del socio principal
+    public void addExpense(Scanner sc, Member member) {
+        System.out.print("Enter the name of the associate: ");
+        String affiliateName = sc.nextLine().trim(); // Lee el nombre del asociado y elimina espacios
+
+        if (!namesOfAssociates.contains(affiliateName)) {
+            System.out.println("Error: The affiliate '" + affiliateName + "' is not registered.");
+            return;
+        }
+
+        System.out.print("Enter the expense amount for affiliate " + affiliateName + ": ");
+        int amount;
+
+        try {
+            amount = sc.nextInt();
+            sc.nextLine(); // Limpiar el buffer
+
+            // Validar que el monto sea positivo
+            if (amount <= 0) {
+                System.out.println("Error: The expense amount must be positive.");
+                return;
+            }
+
+            // Validar que el miembro tenga suficientes fondos antes de registrar el gasto
+            if (amount > member.getAvailableFunds()) {
+                System.out.println("Error: Insufficient funds to cover the expense of $" + amount);
+                return;
+            }
+
+            // Registrar el gasto
+            expenses.put(affiliateName, expenses.getOrDefault(affiliateName, 0) + amount);
+            System.out.println("Expense of $" + amount + " recorded for the associate: " + affiliateName);
+            
+            // Actualizar los fondos del miembro
+            member.setAvailableFunds(member.getAvailableFunds() - amount); // Restar el gasto
+            System.out.println("Expense of $" + amount + " deducted from member " + member.getName() + "'s account.");
+
+        } catch (Exception e) {
+            System.out.println("Error: Please enter a valid amount.");
+            sc.nextLine(); // Limpiar el buffer en caso de error
+        }
+    }
+
+    // Mostrar gastos registrados
+    public void showExpenses() {
+        System.out.println("===== Registered Expenses =====");
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses recorded.");
+        } else {
+            for (Map.Entry<String, Integer> entry : expenses.entrySet()) {
+                System.out.println("Affiliate: " + entry.getKey() + ", Total Expense: $" + entry.getValue());
+            }
+        }
+    }
+
+>>>>>>> origin/code-update
+>>>>>>> origin/code-update
     // Eliminar asociados si no hay facturas pendientes
     public void removeAuthorizedPersons(Scanner sc, int pendingInvoices) {
         System.out.print("Enter the name of the associate to remove: ");
@@ -74,13 +136,25 @@ public class Affiliates extends SocialClub {
 
     @Override
     public boolean removeMember(Scanner sc, String id) {
+<<<<<<< HEAD
         // Puedes dejarlo sin implementar o definirlo si es necesario
+=======
+<<<<<<< HEAD
+        // Puedes dejarlo sin implementar o definirlo si es necesario
+=======
+>>>>>>> origin/code-update
+>>>>>>> origin/code-update
         throw new UnsupportedOperationException("Unimplemented method 'removeMember'");
     }
 
     @Override
     public void registerMember(Scanner sc) {
+<<<<<<< HEAD
         listOfPeople(sc, null);
+=======
+<<<<<<< HEAD
+        listOfPeople(sc);
+>>>>>>> origin/code-update
     }
 
     public void addExpense(Scanner sc, Member member,HashSet<String> namesOfAssociates2) {
@@ -134,7 +208,16 @@ public class Affiliates extends SocialClub {
         } catch (Exception e) {
             System.out.println("Error: Please enter a valid amount.");
             sc.nextLine(); // Limpiar el buffer en caso de error
+<<<<<<< HEAD
         }
+=======
+
+       }
+=======
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'registerMember'");
+>>>>>>> origin/code-update
+>>>>>>> origin/code-update
     }
 
    

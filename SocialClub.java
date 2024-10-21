@@ -19,6 +19,29 @@ public abstract class SocialClub {
         this.memberList = new ArrayList<>(); // Inicializa la lista de miembros
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    // Métodos abstractos que deben ser implementados por las subclases
+    public abstract void showUsers(); // Mostrar los usuarios registrados
+
+    public abstract void registerMember(Scanner sc);
+    
+    public abstract boolean removeMember(Scanner sc,String id);
+
+    // Método para establecer fondos disponibles (se puede usar en subclases)
+    public void setAvailableFunds(int amount) {
+        if (amount < 0) {
+            System.out.println("El monto no puede ser negativo.");
+            return;
+        }
+        this.availableFunds = amount;
+        System.out.println("Fondos disponibles actualizados a: " + this.availableFunds);
+    }
+>>>>>>> origin/code-update
+
+>>>>>>> origin/code-update
     public int getAvailableFunds() {
         return availableFunds;
     }
