@@ -18,6 +18,10 @@ public abstract class SocialClub {
         this.subscription = "";
         this.memberList = new ArrayList<>(); // Inicializa la lista de miembros
     }
+    public SocialClub(String name, String id){
+        this.name = name;
+        this.id = id;
+    }
 
     public int getAvailableFunds() {
         return availableFunds;

@@ -38,14 +38,14 @@ public class Member extends SocialClub {
         this.affiliates = new Affiliates();
     }
 
-    // Constructor que recibe nombre y ID
+    
     public Member(String name, String id) {
         super();
         this.namesOfAssociates = new HashSet<>();
         this.name = name;
         this.id = id;
         this.availableFunds = 0;
-        this.invoices = new Invoices(0); // Inicializar las facturas
+        this.invoices = new Invoices(0); 
         this.subscription = "";
         this.affiliates = new Affiliates();
     }
@@ -60,7 +60,7 @@ public class Member extends SocialClub {
     }
 
     public String getId() {
-    return id; // Asegúrate de que `id` se inicialice correctamente
+    return id; 
     }
 
     public void setId(String id) {
@@ -91,8 +91,12 @@ public class Member extends SocialClub {
         this.invoices = invoices;
     }
 
+    public void setNamesOfAssociates(HashSet<String> namesOfAssociates) {
+        this.namesOfAssociates = namesOfAssociates;
+    }
+
     public HashSet<String> getNamesOfAssociates() {
-        return namesOfAssociates; // Retorna el conjunto de nombres de afiliados
+        return namesOfAssociates; 
     }
 
 
@@ -186,7 +190,7 @@ public class Member extends SocialClub {
             System.out.println("0. Exit");
             System.out.print("Select an option: ");
             int option = sc.nextInt();
-            sc.nextLine(); // Limpiar el buffer
+            sc.nextLine(); 
     
             switch (option) {
                 case 1:
@@ -241,7 +245,7 @@ public class Member extends SocialClub {
 
     @Override
     public boolean removeMember(Scanner sc, String id) {
-        // Imprimir mensaje para pedir el ID del socio
+        
         System.out.println("Enter the ID of the member to remove: ");
         String remove = sc.nextLine();  // Leer el ID proporcionado por el usuario
 
@@ -364,8 +368,4 @@ public class Member extends SocialClub {
             }
         }
     }
-    // Método para registrar costos y crear facturas
-    
-
-    // Método para mostrar las facturas
 }

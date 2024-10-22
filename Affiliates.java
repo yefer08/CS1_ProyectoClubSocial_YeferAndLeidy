@@ -8,17 +8,28 @@ public class Affiliates extends SocialClub {
     private Map<String, Integer> expenses; // Mapa para almacenar los gastos de los afiliados
 
     public Affiliates() {
-        super(); // Llama al constructor de la clase base
+        super(); 
         this.namesOfAssociates = new HashSet<>();
-        this.expenses = new HashMap<>(); // Inicializa el mapa de gastos
+        this.expenses = new HashMap<>(); 
+    }
+
+    public Affiliates(String id, String name) {
+        super(id, name);
+        this.namesOfAssociates = new HashSet<>();
+        this.expenses = new HashMap<>();
     }
 
     // Registro de nombres de asociados
     public void listOfPeople(Scanner sc, Member member) {
+        if (member == null) {
+            System.out.println("Error: No valid member provided.");
+            return;
+        }
+
         System.out.println("Enter the names of the associates (max. 10). Type 'exit' to finish:");
-        
+
         // Acceder al conjunto de asociados del miembro específico
-        HashSet<String> namesOfAssociates = member.namesOfAssociates;
+        HashSet<String> namesOfAssociates = member.getNamesOfAssociates(); // Usa el getter
     
         while (namesOfAssociates.size() < 10) {
             System.out.print("Enter a name: ");
@@ -48,11 +59,11 @@ public class Affiliates extends SocialClub {
         System.out.println("Registered associates: " + (namesOfAssociates.isEmpty() ? "No associates registered." : namesOfAssociates));
     }
 
-    // Método para agregar gastos a nombre del socio principal
+    
     public void addExpense(Scanner sc, Member member) {
         // Validar si el ID del miembro es correcto
         System.out.print("Enter your member ID: ");
-        String memberId = sc.nextLine().trim();  // Leer y eliminar espacios
+        String memberId = sc.nextLine().trim();  
         
         if (!member.getId().equals(memberId)) {
             System.out.println("Error: Invalid member ID.");
@@ -61,7 +72,7 @@ public class Affiliates extends SocialClub {
 
         // Leer el nombre del afiliado
         System.out.print("Enter the name of the associate: ");
-        String affiliateName = sc.nextLine().trim(); // Lee el nombre del asociado y elimina espacios
+        String affiliateName = sc.nextLine().trim(); 
 
         // Verificar si el afiliado está registrado en la lista de asociados del miembro
         if (!member.getNamesOfAssociates().contains(affiliateName)) {
@@ -74,7 +85,7 @@ public class Affiliates extends SocialClub {
         int amount;
 
         try {
-            amount = Integer.parseInt(sc.nextLine()); // Limpiar el buffer de entrada
+            amount = Integer.parseInt(sc.nextLine()); 
 
             // Validar que el monto sea positivo
             if (amount <= 0) {
@@ -104,7 +115,7 @@ public class Affiliates extends SocialClub {
     // Eliminar asociados si no hay facturas pendientes
     public void removeAuthorizedPersons(Scanner sc, int pendingInvoices) {
         System.out.print("Enter the name of the associate to remove: ");
-        String nameToRemove = sc.nextLine().trim(); // Elimina espacios en blanco
+        String nameToRemove = sc.nextLine().trim(); 
 
         // Verificar si hay facturas pendientes
         if (pendingInvoices != 0) {
@@ -127,14 +138,17 @@ public class Affiliates extends SocialClub {
 
     @Override
     public boolean removeMember(Scanner sc, String id) {
+        
         throw new UnsupportedOperationException("Unimplemented method 'removeMember'");
     }
 
     @Override
     public void registerMember(Scanner sc) {
-        listOfPeople(sc, null);
+        Member newMember = new Member();
+        listOfPeople(sc, newMember);    
     }
 }
+
 
 
 

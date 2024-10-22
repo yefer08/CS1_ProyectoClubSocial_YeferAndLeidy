@@ -21,7 +21,7 @@ public class Invoices {
 
     public Invoices() {
         this.pendingInvoices = 0;
-        this.invoiceList = new ArrayList<>(); // Asegúrate de inicializar la lista
+        this.invoiceList = new ArrayList<>(); 
     }
 
     public int getPendingInvoices() {
@@ -56,10 +56,10 @@ public class Invoices {
             return;
         }
 
-        // Asumimos que ya tienes el `Member` encontrado, puedes trabajar con él.
+        
         System.out.println("Registro de gastos para el usuario: " + foundMember.getName() + " (ID: " + foundMember.getId() + ")");
 
-        // Continuar con la lógica de registro de gastos
+        
         while (true) {
             if (iterate >= costsArray.length) {
                 try {
@@ -82,18 +82,18 @@ public class Invoices {
             try {
                 costs = Integer.parseInt(input); // Convertir la entrada a número
             } catch (NumberFormatException e) {
-                ErrorHandler.handleInputMismatchException(); // Llama a la función para manejar el error de entrada
+                ErrorHandler.handleInputMismatchException(); 
                 System.out.println("Error: El valor ingresado no es un número válido.");
                 continue; // Pedir un nuevo valor
             }
 
             if (costs <= 0) {
                 System.out.println("El costo debe ser un valor positivo.");
-                continue; // Pedir un nuevo valor
+                continue; 
             }
 
             // Crear una nueva factura
-            Invoice newInvoice = new Invoice(foundMember.getId(), costs, input, costs); // Asegúrate de que el constructor de Invoice acepte ID y monto
+            Invoice newInvoice = new Invoice(foundMember.getId(), costs, input, costs);
             invoiceList.add(newInvoice); // Añadir la factura a la lista de facturas
 
             // Registrar el costo en el arreglo
@@ -152,6 +152,7 @@ public class Invoices {
 
     public void payInvoices(Scanner sc, Member member) {
         System.out.println("aun no lo implemetamos....");
+        //A la espera de poder resolver lo del ID para registrar costos e implementar los pagod
         throw new UnsupportedOperationException("Unimplemented method 'payInvoices'");
     }
 

@@ -7,9 +7,9 @@
  public class SocialClubManager {
      public static void main(String[] args) {
          Scanner sc = new Scanner(System.in);
-         Member member = new Member(); // Crear un miembro con datos predeterminados
+         Member member = new Member(); 
          Affiliates affiliates = new Affiliates();
-         Invoices invoices = new Invoices(); // Cambiado a invoices
+         Invoices invoices = new Invoices(); 
          int option;
  
          do {
@@ -21,11 +21,12 @@
              System.out.println("5. View Pending Invoices");
              System.out.println("6. Show Users");
              System.out.println("7. Pay Invoices");
-             System.out.println("8. Remove Member or Affiliate");
+             System.out.println("8. add expense");
+             System.out.println("9. Remove Member or Affiliate");
              System.out.println("0. Exit");
              System.out.print("Select an option: ");
              option = sc.nextInt();
-             sc.nextLine(); // Consumir el salto de línea
+             sc.nextLine(); 
  
              switch (option) {
                  case 1:
@@ -38,22 +39,22 @@
                      member.showAffiliatesInfo(sc); 
                      break;
                  case 4:
-                     invoices.fullCosts(sc); // Cambiado a invoices
+                     invoices.fullCosts(sc); 
                      break;
                  case 5:
-                     invoices.showInvoices(sc); // Cambiado a invoices
+                     invoices.showInvoices(sc); 
                      break;
                  case 6:
                      member.showUsers(); 
                      break;
                  case 7:
-                     invoices.payInvoices(sc, member); // Cambiado a invoices
+                     invoices.payInvoices(sc, member); 
                      break;
                  case 8:
-                     // Aquí podrías implementar la lógica para registrar costos, si es necesario
+                     affiliates.addExpense(sc, member);
                      break;
                  case 9:
-                     member.removeMemberOrAffiliate(sc, invoices); // Cambiado a invoices
+                     member.removeMemberOrAffiliate(sc, invoices); 
                      break;
                  case 0:
                      System.out.println("Exiting...");
